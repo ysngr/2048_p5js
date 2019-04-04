@@ -1,12 +1,13 @@
 /* 2048 */
 
+const CANVAS_SIZE = 300;
 const SIZE = 4;
 
 var panels = [];
 
 
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(CANVAS_SIZE, CANVAS_SIZE);
   background(0);
   this.genPanels();
 }
@@ -47,32 +48,32 @@ const TO_TOP = 1, TO_BOTTOM = -1;
 const TO_LEFT = 2, TO_RIGHT = -2;
 
 
-//function keyPressed() {
+function keyPressed() {
 
-//  var isPanelMoved;
-//  switch( keyCode ) {
-//  case UP_ARROW : 
-//    isPanelMoved = move(TO_TOP); 
-//    break; 
-//  case DOWN_ARROW : 
-//    isPanelMoved = move(TO_BOTTOM); 
-//    break;
-//  case LEFT_ARROW : 
-//    isPanelMoved = move(TO_LEFT); 
-//    break;
-//  case RIGHT_ARROW : 
-//    isPanelMoved = move(TO_RIGHT); 
-//    break;
-//  default : 
-//    isPanelMoved = false;
-//  }
+  var isPanelMoved;
+  switch( keyCode ) {
+  case UP_ARROW : 
+    isPanelMoved = move(TO_TOP); 
+    break; 
+  case DOWN_ARROW : 
+    isPanelMoved = move(TO_BOTTOM); 
+    break;
+  case LEFT_ARROW : 
+    isPanelMoved = move(TO_LEFT); 
+    break;
+  case RIGHT_ARROW : 
+    isPanelMoved = move(TO_RIGHT); 
+    break;
+  default : 
+    isPanelMoved = false;
+  }
 
-//  if ( isPanelMoved ) {
-//    genNewPanel();
-//  }
+  if ( isPanelMoved ) {
+    genNewPanel();
+  }
 
-//  return ;
-//}
+  return ;
+}
 
 
 var touchStartX, touchStartY;
@@ -270,7 +271,7 @@ function genNewPanel() {
 //  View
 //====================================================================
 
-const PNL_SIZE = 100;
+const PNL_SIZE = 300 / SIZE;
 
 
 function board() {
@@ -283,11 +284,11 @@ function board() {
       if ( panels[row][column] != 0 ) {
         fill(00, 00, 00);  // black
         if ( panels[row][column] < 100 ) {  // digit = 1
-          textSize(80);
+          textSize(60);
         } else if ( panels[row][column] < 1000 ) {  // digit = 2
-          textSize(50);
+          textSize(40);
         } else {  // digit >= 3
-          textSize(30);
+          textSize(20);
         }
         textAlign(CENTER, CENTER);
         text(panels[row][column], column*PNL_SIZE+PNL_SIZE/2, row*PNL_SIZE+PNL_SIZE/1.5);
@@ -352,13 +353,13 @@ function finMessage() {
   /* panel */
   fill(255, 255, 255);  // white
   rectMode(CENTER);
-  rect(200, 200, 225, 125);
+  rect(CANVAS_SIZE/2, CANVAS_SIZE/2, 200, 100);
 
   /* text */
   fill(00, 00, 00);  // black
-  textSize(24);
+  textSize(16);
   textAlign(CENTER, CENTER);
-  text("GAME OVER !", 200, 175);
+  text("GAME OVER !", CANVAS_SIZE/2, CANVAS_SIZE/2.25);
 
   return ;
 }
