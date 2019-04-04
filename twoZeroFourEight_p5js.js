@@ -7,6 +7,10 @@ var panels = [];
 
 
 function setup() {
+  
+  //window.addEventListener("touchstart", function (event) { event.preventDefault(); }, { passive: false });
+  //window.addEventListener("touchmove", function (event) { event.preventDefault(); }, { passive: false });
+  
   createCanvas(CANVAS_SIZE, CANVAS_SIZE);
   background(0);
   this.genPanels();
@@ -72,7 +76,7 @@ function keyPressed() {
     genNewPanel();
   }
 
-  return ;
+  return false;
 }
 
 
@@ -81,7 +85,7 @@ var touchStartX, touchStartY;
 function touchStarted() {
   touchStartX = mouseX;
   touchStartY = mouseY;
-  return ;
+  return false;
 }
 
 function touchEnded() {
@@ -110,7 +114,7 @@ function touchEnded() {
     genNewPanel();
   }
 
-  return ;
+  return false;
 }
 
 
