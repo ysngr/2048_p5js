@@ -1,5 +1,6 @@
 /* 2048 (p5.js) */
 
+
 const CANVAS_SIZE = 300;
 const SIZE = 4;
 
@@ -199,7 +200,7 @@ function move(direction) {
       }
     }
 
-    /* move to celected direction */
+    /* move to selected direction */
     var idx = (incr >= 0)? 0 : SIZE-1;
     for (var orthLine = idx; 0 <= orthLine && orthLine < SIZE; orthLine += incr) {
       if ( replLine[orthLine] != 0 ) {
@@ -270,7 +271,7 @@ function genNewPanel() {
   }
 
   /* generate new panel */
-  panels[newPanelLine][newPanelRow] = (random(0, 2) >= 1 ? 2 : 4); 
+  panels[newPanelLine][newPanelRow] = (random(0, 2) >= 1)? 2 : 4; 
 
   return ;
 }
@@ -323,7 +324,7 @@ function getPanelColor(value) {
     pnlCol = color(135, 206, 250);  // light sky blue
     break;
   case 4 : 
-    pnlCol = color(246, 246, 250);  // lavender e6e6fa
+    pnlCol = color(246, 246, 250);  // lavender
     break;
   case 8 : 
     pnlCol = color(00, 255, 255);  // aqua 
@@ -335,7 +336,7 @@ function getPanelColor(value) {
     pnlCol = color(218, 165, 20);  // golden rod
     break;
   case 64 : 
-    pnlCol = color(255, 250, 00);  // orange
+    pnlCol = color(255, 165, 00);  // orange
     break;  
   case 128 : 
     pnlCol = color(255, 255, 00);  // yellow
@@ -344,7 +345,7 @@ function getPanelColor(value) {
     pnlCol = color(173, 255, 47);  // green yellow
     break; 
   case 512 : 
-    pnlCol = color(90, 238, 90);  // light green 90ee90
+    pnlCol = color(90, 238, 90);  // light green
     break;
   case 1024 : 
     pnlCol = color(93, 70, 219);  // medium purple
