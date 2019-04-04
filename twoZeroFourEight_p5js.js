@@ -1,4 +1,4 @@
-/* 2048 */
+/* 2048 (p5.js) */
 
 const CANVAS_SIZE = 300;
 const SIZE = 4;
@@ -13,6 +13,7 @@ function setup() {
   background(0);
   this.genPanels();
 }
+
 
 function genPanels() {
 
@@ -34,12 +35,14 @@ function genPanels() {
 }
 
 
+
 function draw() {
-  board();
+  drawBoard();
   if ( isGameFinished() ) {
-    finMessage();
+    drawFinMessage();
   }
 }
+
 
 
 //====================================================================
@@ -82,10 +85,10 @@ function keyPressed() {
 var touchStartX, touchStartY;
 
 function touchStarted() {
-  
+
   touchStartX = mouseX;
   touchStartY = mouseY;
-  
+
   return false;  // prevent default
 }
 
@@ -278,10 +281,10 @@ function genNewPanel() {
 //  View
 //====================================================================
 
-const PNL_SIZE = 300 / SIZE;
+const PNL_SIZE = CANVAS_SIZE / SIZE;
 
 
-function board() {
+function drawBoard() {
 
   for (var row = 0; row < SIZE; row++) {
     for (var column = 0; column < SIZE; column++) {
@@ -357,7 +360,7 @@ function getPanelColor(value) {
 }
 
 
-function finMessage() {
+function drawFinMessage() {
 
   /* panel */
   fill(255, 255, 255);  // white
