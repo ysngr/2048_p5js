@@ -3,14 +3,12 @@
 const CANVAS_SIZE = 300;
 const SIZE = 4;
 
+
 var panels = [];
 
 
-function setup() {
-  
-  //window.addEventListener("touchstart", function (event) { event.preventDefault(); }, { passive: false });
-  //window.addEventListener("touchmove", function (event) { event.preventDefault(); }, { passive: false });
-  
+
+function setup() {  
   createCanvas(CANVAS_SIZE, CANVAS_SIZE);
   background(0);
   this.genPanels();
@@ -76,17 +74,21 @@ function keyPressed() {
     genNewPanel();
   }
 
-  return false;
+  return false;  // prevent default
 }
 
 
+/* for smartphone */
 var touchStartX, touchStartY;
 
 function touchStarted() {
+  
   touchStartX = mouseX;
   touchStartY = mouseY;
-  return false;
+  
+  return false;  // prevent default
 }
+
 
 function touchEnded() {
 
@@ -109,13 +111,14 @@ function touchEnded() {
       isPanelMoved = move(TO_RIGHT);
     }
   }
-    
+
   if ( isPanelMoved ) {
     genNewPanel();
   }
 
-  return false;
+  return false;  // prevent default
 }
+
 
 
 //====================================================================
@@ -282,9 +285,11 @@ function board() {
 
   for (var row = 0; row < SIZE; row++) {
     for (var column = 0; column < SIZE; column++) {
+      /* panel */
       fill(getPanelColor(panels[row][column]));
       rectMode(CORNER);
       rect(column*PNL_SIZE, row*PNL_SIZE, PNL_SIZE, PNL_SIZE);
+      /* figure */
       if ( panels[row][column] != 0 ) {
         fill(00, 00, 00);  // black
         if ( panels[row][column] < 100 ) {  // digit = 1
