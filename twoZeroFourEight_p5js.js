@@ -6,6 +6,7 @@ const SIZE = 4;
 
 
 var panels = [];
+var newPanelRow, newPanelColumn, newPanelSize;
 
 
 
@@ -30,6 +31,7 @@ function genPanels() {
   /* put initial panels */
   for (var i = 0; i < 2; i++) {
     genNewPanel();
+    newPanelSize = CANVAS_SIZE / SIZE; // (== PNL_SIZE)
   }
 
   return ;
@@ -261,17 +263,17 @@ function isPanelMoved(prevPanels) {
 function genNewPanel() {
 
   /* find place for new panel */
-  var newPanelLine, newPanelRow;
   while ( true ) {
-    newPanelLine = int(random(0, 4));
     newPanelRow = int(random(0, 4));
-    if ( panels[newPanelLine][newPanelRow] == 0 ) {
+    newPanelColumn = int(random(0, 4));
+    if ( panels[newPanelRow][newPanelColumn] == 0 ) {
       break;
     }
   }
 
   /* generate new panel */
-  panels[newPanelLine][newPanelRow] = (random(0, 2) >= 1)? 2 : 4; 
+  panels[newPanelRow][newPanelColumn] = (random(0, 2) >= 1)? 2 : 4; 
+  newPanelSize = 30;
 
   return ;
 }
@@ -289,10 +291,25 @@ function drawBoard() {
 
   for (var row = 0; row < SIZE; row++) {
     for (var column = 0; column < SIZE; column++) {
+
       /* panel */
-      fill(getPanelColor(panels[row][column]));
-      rectMode(CORNER);
-      rect(column*PNL_SIZE, row*PNL_SIZE, PNL_SIZE, PNL_SIZE);
+      if ( row == newPanelRow && column == newPanelColumn ) {
+        rectMode(CENTER);
+        if ( newPanelSize < PNL_SIZE ) {
+          // overwrite place for new panel by gray(0)
+          fill(getPanelColor(0));  
+          rect(column*PNL_SIZE+PNL_SIZE/2, row*PNL_SIZE+PNL_SIZE/2, PNL_SIZE, PNL_SIZE);
+        }
+        // draw new panel with panel size increasing
+        fill(getPanelColor(panels[row][column]));
+        rect(column*PNL_SIZE+PNL_SIZE/2, row*PNL_SIZE+PNL_SIZE/2, newPanelSize, newPanelSize);
+        newPanelSize += (newPanelSize+5 > PNL_SIZE)? 0 : 5;
+      } else {
+        fill(getPanelColor(panels[row][column]));
+        rectMode(CORNER);
+        rect(column*PNL_SIZE, row*PNL_SIZE, PNL_SIZE, PNL_SIZE);
+      }      
+
       /* figure */
       if ( panels[row][column] != 0 ) {
         fill(00, 00, 00);  // black
