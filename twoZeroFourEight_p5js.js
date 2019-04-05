@@ -273,7 +273,7 @@ function genNewPanel() {
 
   /* generate new panel */
   panels[newPanelRow][newPanelColumn] = (random(0, 2) >= 1)? 2 : 4; 
-  newPanelSize = 30;
+  newPanelSize = 45;
 
   return ;
 }
