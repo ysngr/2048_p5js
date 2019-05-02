@@ -1,9 +1,10 @@
 /* 2048 (p5.js) */
 
 
-const CANVAS_SIZE = 300;
+const BOARD_SIZE = 300;
+const CANVAS_SIZE = BOARD_SIZE + 30;
 const SIZE = 4;
-const PNL_SIZE = CANVAS_SIZE / SIZE;
+const PNL_SIZE = BOARD_SIZE / SIZE;
 
 
 let mdl, view;
@@ -19,6 +20,7 @@ function setup() {
 
 
 function draw() {
+  translate(15, 15);
   view.board();
   if ( mdl.isGameFinished() ) {
     view.finMessage();

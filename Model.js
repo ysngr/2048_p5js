@@ -10,12 +10,12 @@ let Model = function() {
   this.newPanelRow = -1; 
   this.newPanelColumn = -1; 
   this.newPanelSize = -1;
-}
+};
 
 
 
-Model.prototype.genPanels = function(){
-  
+Model.prototype.genPanels = function() {
+
   /* generate panels */
   let panelsRow = [];
   for (let column = 0; column < SIZE; column++) {
@@ -28,7 +28,7 @@ Model.prototype.genPanels = function(){
   /* put initial panels */
   for (let i = 0; i < 2; i++) {
     this.genNewPanel();
-    this.newPanelSize = CANVAS_SIZE / SIZE; // (== PNL_SIZE)
+    this.newPanelSize = BOARD_SIZE / SIZE; // (== PNL_SIZE)
   }
 
   return ;
@@ -173,8 +173,9 @@ Model.prototype.isGameFinished = function() {
       }
       // horizontal
       if ( column < SIZE - 1 ) {
-        if ( this.panels[row][column] == this.panels[row][column+1] )
+        if ( this.panels[row][column] == this.panels[row][column+1] ) {
           return false;  // continue
+        }
       }
     }
   }

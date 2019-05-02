@@ -3,8 +3,11 @@
 //====================================================================
 
 
+const GUTTER = 2;
+
+
 let View = function() {
-}
+};
 
 
 
@@ -14,21 +17,21 @@ View.prototype.board = function() {
     for (let column = 0; column < SIZE; column++) {
 
       /* panel */
+      rectMode(CENTER);
+      noStroke();
+      fill(this.getPanelColor(0));
+      rect(column*PNL_SIZE+PNL_SIZE/2, row*PNL_SIZE+PNL_SIZE/2, PNL_SIZE, PNL_SIZE);  // frame
+
+      strokeWeight(1);
+      stroke(0, 0, 0);
       if ( row == mdl.newPanelRow && column == mdl.newPanelColumn ) {
-        rectMode(CENTER);
-        if ( mdl.newPanelSize < PNL_SIZE ) {
-          // overwrite place for new panel by gray(0)
-          fill(this.getPanelColor(0));  
-          rect(column*PNL_SIZE+PNL_SIZE/2, row*PNL_SIZE+PNL_SIZE/2, PNL_SIZE, PNL_SIZE);
-        }
         // draw new panel with panel size increasing
         fill(this.getPanelColor(mdl.panels[row][column]));
-        rect(column*PNL_SIZE+PNL_SIZE/2, row*PNL_SIZE+PNL_SIZE/2, mdl.newPanelSize, mdl.newPanelSize);
-        mdl.newPanelSize += (mdl.newPanelSize+5 > PNL_SIZE)? 0 : 5;
+        rect(column*PNL_SIZE+PNL_SIZE/2, row*PNL_SIZE+PNL_SIZE/2, mdl.newPanelSize-GUTTER*2, mdl.newPanelSize-GUTTER*2);
+        mdl.newPanelSize += (mdl.newPanelSize+5 > PNL_SIZE )? 0 : 5;
       } else {
         fill(this.getPanelColor(mdl.panels[row][column]));
-        rectMode(CORNER);
-        rect(column*PNL_SIZE, row*PNL_SIZE, PNL_SIZE, PNL_SIZE);
+        rect(column*PNL_SIZE+PNL_SIZE/2, row*PNL_SIZE+PNL_SIZE/2, PNL_SIZE-GUTTER*2, PNL_SIZE-GUTTER*2);
       }      
 
       /* figure */
@@ -102,15 +105,17 @@ View.prototype.getPanelColor = function(value) {
 View.prototype.finMessage = function() {
 
   /* panel */
+  noStroke();
   fill(255, 255, 255);  // white
   rectMode(CENTER);
-  rect(CANVAS_SIZE/2, CANVAS_SIZE/2, 200, 100);
+  rect(BOARD_SIZE/2, BOARD_SIZE/2, 200, 100);
 
   /* text */
+  noStroke();
   fill(00, 00, 00);  // black
   textSize(16);
   textAlign(CENTER, CENTER);
-  text("GAME OVER !", CANVAS_SIZE/2, CANVAS_SIZE/2.25);
+  text("GAME OVER !", BOARD_SIZE/2, BOARD_SIZE/2.25);
 
   return ;
 };
