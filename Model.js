@@ -182,3 +182,18 @@ Model.prototype.isGameFinished = function() {
 
   return true;  // end
 };
+
+
+Model.prototype.getMaxPanel = function() {
+
+  let max = -1;
+  for (let row = 0; row < SIZE; row++) {
+    for (let column = 0; column < SIZE; column++) {
+      if ( this.panels[row][column] > max ) {
+        max = this.panels[row][column];
+      }
+    }
+  }
+
+  return max;
+};

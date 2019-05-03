@@ -13,7 +13,7 @@ let mdl, view;
 
 function setup() {  
   createCanvas(CANVAS_SIZE, CANVAS_SIZE);
-  background(0);
+  background("#FFFFFF");
   mdl = new Model();
   view = new View();
 }

@@ -7,6 +7,7 @@ const GUTTER = 2;
 
 
 let View = function() {
+  textFont("Serif");
 };
 
 
@@ -16,14 +17,14 @@ View.prototype.board = function() {
   for (let row = 0; row < SIZE; row++) {
     for (let column = 0; column < SIZE; column++) {
 
-      /* panel */
       rectMode(CENTER);
+      /* frame */
       noStroke();
-      fill(this.getPanelColor(0));
-      rect(column*PNL_SIZE+PNL_SIZE/2, row*PNL_SIZE+PNL_SIZE/2, PNL_SIZE, PNL_SIZE);  // frame
-
+      fill(this.getPanelColor(-1));
+      rect(column*PNL_SIZE+PNL_SIZE/2, row*PNL_SIZE+PNL_SIZE/2, PNL_SIZE, PNL_SIZE);
+      /* panel */
       strokeWeight(1);
-      stroke(0, 0, 0);
+      stroke("#000000");  // black
       if ( row == mdl.newPanelRow && column == mdl.newPanelColumn ) {
         // draw new panel with panel size increasing
         fill(this.getPanelColor(mdl.panels[row][column]));
@@ -36,12 +37,25 @@ View.prototype.board = function() {
 
       /* figure */
       if ( mdl.panels[row][column] != 0 ) {
-        fill(00, 00, 00);  // black
         if ( mdl.panels[row][column] < 100 ) {  // digit = 1
-          textSize(60);
+          strokeWeight(1);
+          stroke("#000000");  // black
+          fill("#000000");  // black
+          textSize(50);
         } else if ( mdl.panels[row][column] < 1000 ) {  // digit = 2
-          textSize(40);
-        } else {  // digit >= 3
+          strokeWeight(1);
+          stroke("#FFFFFF");  // white
+          fill("#FFFFFF");  // white
+          textSize(30);
+        } else if ( mdl.panels[row][column] < 10000 ) {  // digit = 3
+          strokeWeight(1);
+          stroke("#FFFFFF");  // white
+          fill("#FFFFFF");  // white
+          textSize(25);
+        } else {  // digit >= 4
+          strokeWeight(1);
+          stroke("#000000");  // black
+          fill("#000000");  // white
           textSize(20);
         }
         textAlign(CENTER, CENTER);
@@ -58,44 +72,54 @@ View.prototype.getPanelColor = function(value) {
 
   let pnlCol;
   switch(value) {
-  case 0 : 
-    pnlCol = color(169, 169, 169);  // gray
+  case -1 :  // frame color
+    pnlCol = color("#696969");  // dimgray
+    break;
+  case 0 :   // empty panel color
+    pnlCol = color("#D3D3D3");  // frosty white
     break;
   case 2 : 
-    pnlCol = color(135, 206, 250);  // light sky blue
+    pnlCol = color("#A0D8EF");  // sora
     break;
   case 4 : 
-    pnlCol = color(246, 246, 250);  // lavender
+    pnlCol = color("#CEE4AE");  // natsumushi
     break;
   case 8 : 
-    pnlCol = color(00, 255, 255);  // aqua 
+    pnlCol = color("#BBBCDA");  // huji
     break;
   case 16 : 
-    pnlCol = color(238, 232, 170);  // pale golden rod
+    pnlCol = color("#D6C6AF");  // ama
     break; 
   case 32 : 
-    pnlCol = color(218, 165, 20);  // golden rod
+    pnlCol = color("#D9A62E");  // hajizome
     break;
   case 64 : 
-    pnlCol = color(255, 165, 00);  // orange
+    pnlCol = color("#68BE8D");  // wakatake
     break;  
   case 128 : 
-    pnlCol = color(255, 255, 00);  // yellow
+    pnlCol = color("#028760");  // tokiwa midori
     break; 
   case 256 : 
-    pnlCol = color(173, 255, 47);  // green yellow
+    pnlCol = color("#5654A2");  // kikyo
     break; 
   case 512 : 
-    pnlCol = color(90, 238, 90);  // light green
+    pnlCol = color("#0095D9");  // ao
     break;
   case 1024 : 
-    pnlCol = color(93, 70, 219);  // medium purple
+    pnlCol = color("#F39800");  // kintya
     break; 
   case 2048 : 
-    pnlCol = color(255, 255, 00);  // red 
+    pnlCol = color("#E2041B");  // shoujyouhi
+    break;
+  case 4096 :
+    pnlCol = color("#AA4C8F");  // ume murasaki
+    break;
+  case 8192 :
+    pnlCol = color("#9F6F55");  // tonotya
     break;
   default : 
-    pnlCol = color(255, 182, 193);  // pink
+    pnlCol = color("#EEBBCB");  // nadesiko
+    break;
   }
 
   return pnlCol;
@@ -105,17 +129,18 @@ View.prototype.getPanelColor = function(value) {
 View.prototype.finMessage = function() {
 
   /* panel */
-  noStroke();
-  fill(255, 255, 255);  // white
+  strokeWeight(5);
+  stroke("#E6E6FA");  // lavender
+  fill("#FFFFFF");  // white
   rectMode(CENTER);
   rect(BOARD_SIZE/2, BOARD_SIZE/2, 200, 100);
 
   /* text */
   noStroke();
-  fill(00, 00, 00);  // black
+  fill("#000000");  // black
   textSize(16);
   textAlign(CENTER, CENTER);
-  text("GAME OVER !", BOARD_SIZE/2, BOARD_SIZE/2.25);
+  text("GAME OVER !\nMax panel : " + mdl.getMaxPanel(), BOARD_SIZE/2, BOARD_SIZE/2);
 
   return ;
 };
