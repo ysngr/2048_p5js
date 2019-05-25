@@ -72,24 +72,24 @@ Model.prototype.move = function(direction) {
     }
 
     /* addition */
-    let usablePanelIndex = (incr >= 0)? 0 : SIZE-1;
-    for (let orthLine = usablePanelIndex + incr; 0 <= orthLine && orthLine < SIZE; orthLine += incr) {
-      // if the panel's value is 0, skip to the next loop 
-      if ( replLine[orthLine] == 0 ) {
+    let sumPanelIndex = (direction == TO_TOP || direction == TO_LEFT)? 0 : SIZE-1;  // panel to be added
+    while( 0 <= sumPanelIndex && sumPanelIndex < SIZE ){
+      if( replLine[sumPanelIndex] == 0 ){
+        sumPanelIndex += incr;
         continue;
       }
-      // find the target panel to be added
-      let target = orthLine - incr;
-      while ( replLine[target] == 0 ) {
-        if ( (incr >= 0)? --target < usablePanelIndex : ++target > usablePanelIndex ) {
-          break;
-        }
+      /* find terget panel for addition */
+      let targetPanelIndex = sumPanelIndex + incr;  // panel to marge with sumPanel and become zero
+      while( replLine[targetPanelIndex] == 0 && 0 <= targetPanelIndex && targetPanelIndex < SIZE ){
+        targetPanelIndex += incr;
       }
-      // merge with adjacent panel
-      if ( 0 <= target && target < SIZE && replLine[target] == replLine[orthLine] ) {
-        replLine[target] += replLine[orthLine];
-        replLine[orthLine] = 0;
-        usablePanelIndex = orthLine + incr;
+      /* marge with adjecent panel */
+      if( 0 <= targetPanelIndex && targetPanelIndex < SIZE && replLine[sumPanelIndex] == replLine[targetPanelIndex] ){
+        replLine[sumPanelIndex] += replLine[targetPanelIndex];
+        replLine[targetPanelIndex] = 0;
+        sumpanelIndex = targetPanelIndex + incr;
+      }else{
+        sumPanelIndex += incr;
       }
     }
 
@@ -105,7 +105,8 @@ Model.prototype.move = function(direction) {
         idx += incr;
       }
     }
-    // set value(0) in empty place
+    
+    /* set value(0) in empty place */
     while ( 0 <= idx && idx < SIZE ) {
       if ( direction == TO_TOP || direction == TO_BOTTOM ) {
         this.panels[idx][line] = 0;
