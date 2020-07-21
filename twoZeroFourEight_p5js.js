@@ -1,5 +1,3 @@
-/* 2048 (p5.js) */
-
 
 const BOARD_SIZE = 300;
 const CANVAS_SIZE = BOARD_SIZE + 30;

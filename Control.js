@@ -3,8 +3,9 @@
 //====================================================================
 
 
-const TO_TOP = 1, TO_BOTTOM = -1; 
-const TO_LEFT = 2, TO_RIGHT = -2;
+//const TO_TOP = 1, TO_BOTTOM = -1; 
+//const TO_LEFT = 2, TO_RIGHT = -2;
+const TONORTH = 1, TOEAST = 2, TOSOUTH = 3, TOWEST = 4;
 
 
 function keyPressed() {
@@ -12,16 +13,16 @@ function keyPressed() {
   let isPanelMoved;
   switch( keyCode ) {
   case UP_ARROW : 
-    isPanelMoved = mdl.move(TO_TOP); 
+    isPanelMoved = mdl.move(TONORTH); 
     break; 
   case DOWN_ARROW : 
-    isPanelMoved = mdl.move(TO_BOTTOM); 
+    isPanelMoved = mdl.move(TOSOUTH); 
     break;
   case LEFT_ARROW : 
-    isPanelMoved = mdl.move(TO_LEFT); 
+    isPanelMoved = mdl.move(TOWEST); 
     break;
   case RIGHT_ARROW : 
-    isPanelMoved = mdl.move(TO_RIGHT); 
+    isPanelMoved = mdl.move(TOEAST); 
     break;
   default : 
     isPanelMoved = false;

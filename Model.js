@@ -2,6 +2,8 @@
 //  Model
 //====================================================================
 
+const EMPTYPANEL = 0;
+
 
 let Model = function() {
   this.panels = [];
@@ -54,70 +56,145 @@ Model.prototype.genNewPanel = function() {
 };
 
 
+//Model.prototype.move = function(direction) {
+
+//  /* preserve previous panels' state */
+//  let prevPanels = this.copyPrevPanels();
+
+//  /* find incremental value */
+//  let incr = (direction == TO_TOP || direction == TO_LEFT)? 1 : -1;
+
+
+//  for (let line = 0; line < SIZE; line++) {
+
+//    /* replicate panels on line */
+//    let replLine = [];
+//    for (let orthLine = 0; orthLine < SIZE; orthLine++) {
+//      replLine.push((direction == TO_TOP || direction == TO_BOTTOM)? this.panels[orthLine][line] : this.panels[line][orthLine]);
+//    }
+
+//    /* addition */
+//    let sumPanelIndex = (direction == TO_TOP || direction == TO_LEFT)? 0 : SIZE-1;  // panel to be added
+//    while( 0 <= sumPanelIndex && sumPanelIndex < SIZE ){
+//      if( replLine[sumPanelIndex] == 0 ){
+//        sumPanelIndex += incr;
+//        continue;
+//      }
+//      /* find terget panel for addition */
+//      let targetPanelIndex = sumPanelIndex + incr;  // panel to marge with sumPanel and become zero
+//      while( replLine[targetPanelIndex] == 0 && 0 <= targetPanelIndex && targetPanelIndex < SIZE ){
+//        targetPanelIndex += incr;
+//      }
+//      /* marge with adjecent panel */
+//      if( 0 <= targetPanelIndex && targetPanelIndex < SIZE && replLine[sumPanelIndex] == replLine[targetPanelIndex] ){
+//        replLine[sumPanelIndex] += replLine[targetPanelIndex];
+//        replLine[targetPanelIndex] = 0;
+//        sumpanelIndex = targetPanelIndex + incr;
+//      }else{
+//        sumPanelIndex += incr;
+//      }
+//    }
+
+//    /* move to selected direction */
+//    let idx = (incr >= 0)? 0 : SIZE-1;
+//    for (let orthLine = idx; 0 <= orthLine && orthLine < SIZE; orthLine += incr) {
+//      if ( replLine[orthLine] != 0 ) {
+//        if ( direction == TO_TOP || direction == TO_BOTTOM ) {  // move vertically
+//          this.panels[idx][line] = replLine[orthLine];
+//        } else {  // move horizontally
+//          this.panels[line][idx] = replLine[orthLine];
+//        }
+//        idx += incr;
+//      }
+//    }
+
+//    /* set value(0) in empty place */
+//    while ( 0 <= idx && idx < SIZE ) {
+//      if ( direction == TO_TOP || direction == TO_BOTTOM ) {
+//        this.panels[idx][line] = 0;
+//      } else {
+//        this.panels[line][idx] = 0;
+//      }
+//      idx += incr;
+//    }
+//  }
+
+//  return this.isPanelMoved(prevPanels);
+//};
+
+
 Model.prototype.move = function(direction) {
 
-  /* preserve previous panels' state */
   let prevPanels = this.copyPrevPanels();
 
-  /* find incremental value */
-  let incr = (direction == TO_TOP || direction == TO_LEFT)? 1 : -1;
-
-
-  for (let line = 0; line < SIZE; line++) {
-
-    /* replicate panels on line */
-    let replLine = [];
-    for (let orthLine = 0; orthLine < SIZE; orthLine++) {
-      replLine.push((direction == TO_TOP || direction == TO_BOTTOM)? this.panels[orthLine][line] : this.panels[line][orthLine]);
-    }
-
-    /* addition */
-    let sumPanelIndex = (direction == TO_TOP || direction == TO_LEFT)? 0 : SIZE-1;  // panel to be added
-    while( 0 <= sumPanelIndex && sumPanelIndex < SIZE ){
-      if( replLine[sumPanelIndex] == 0 ){
-        sumPanelIndex += incr;
-        continue;
-      }
-      /* find terget panel for addition */
-      let targetPanelIndex = sumPanelIndex + incr;  // panel to marge with sumPanel and become zero
-      while( replLine[targetPanelIndex] == 0 && 0 <= targetPanelIndex && targetPanelIndex < SIZE ){
-        targetPanelIndex += incr;
-      }
-      /* marge with adjecent panel */
-      if( 0 <= targetPanelIndex && targetPanelIndex < SIZE && replLine[sumPanelIndex] == replLine[targetPanelIndex] ){
-        replLine[sumPanelIndex] += replLine[targetPanelIndex];
-        replLine[targetPanelIndex] = 0;
-        sumpanelIndex = targetPanelIndex + incr;
-      }else{
-        sumPanelIndex += incr;
-      }
-    }
-
-    /* move to selected direction */
-    let idx = (incr >= 0)? 0 : SIZE-1;
-    for (let orthLine = idx; 0 <= orthLine && orthLine < SIZE; orthLine += incr) {
-      if ( replLine[orthLine] != 0 ) {
-        if ( direction == TO_TOP || direction == TO_BOTTOM ) {  // move vertically
-          this.panels[idx][line] = replLine[orthLine];
-        } else {  // move horizontally
-          this.panels[line][idx] = replLine[orthLine];
-        }
-        idx += incr;
-      }
-    }
-    
-    /* set value(0) in empty place */
-    while ( 0 <= idx && idx < SIZE ) {
-      if ( direction == TO_TOP || direction == TO_BOTTOM ) {
-        this.panels[idx][line] = 0;
-      } else {
-        this.panels[line][idx] = 0;
-      }
-      idx += incr;
-    }
+  switch( direction ) {
+  case TONORTH :
+    this.moveToNorth(prevPanels);
+    break;
+  case TOEAST :
+    this.moveToEast(prevPanels);
+    break;
+  case TOSOUTH :
+    this.moveToSouth(prevPanels);
+    break;
+  case TOWEST :
+    this.moveToWest(prevPanels);
+    break;
   }
 
   return this.isPanelMoved(prevPanels);
+};
+
+
+Model.prototype.moveToNorth = function() {
+
+  for ( let c = 0; c < SIZE; c++ ) {
+    /* replicate panels on c-th column */
+    let replLine = new Array(SIZE);
+    for ( let r = 0; r < replLine.length; r++ ) {
+      replLine[r] = this.panels[r][c];
+    }
+    /* addition */
+    for ( let r = 0; r < SIZE-1; r++ ) {
+      if ( replLine[r] == EMPTYPANEL ) {
+        continue;
+      }
+      for ( let dr = 1; dr < SIZE-r; dr++ ) {
+        if ( replLine[r] == replLine[r+dr] ) {
+          replLine[r] += replLine[r+dr];
+          replLine[r+dr] = 0;
+          break;
+        }
+      }
+    }
+    /* move */
+    let r = 0;
+    for ( let i = 0; i < SIZE; i++ ) {
+      if ( replLine[i] != EMPTYPANEL ) {
+        this.panels[r++][c] = replLine[i];
+      }
+    }
+    while ( r < SIZE ) {
+      this.panels[r++][c] = 0;
+    }
+  }
+
+  return ;
+};
+
+
+Model.prototype.moveToSouth = function(direction) {
+  return ;
+};
+
+
+Model.prototype.moveToEast = function(direction) {
+  return ;
+};
+
+
+Model.prototype.moveToWest = function(direction) {
+  return ;
 };
 
 
