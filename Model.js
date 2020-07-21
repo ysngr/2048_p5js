@@ -184,6 +184,38 @@ Model.prototype.moveToNorth = function() {
 
 
 Model.prototype.moveToSouth = function(direction) {
+
+  for ( let c = 0; c < SIZE; c++ ) {
+    /* replicate panels on c-th column */
+    let replLine = new Array(SIZE);
+    for ( let r = 0; r < replLine.length; r++ ) {
+      replLine[r] = this.panels[r][c];
+    }
+    /* addition */
+    for ( let r = SIZE-1; r >= 0; r-- ) {
+      if ( replLine[r] == EMPTYPANEL ) {
+        continue;
+      }
+      for ( let dr = 1; dr < r; dr++ ) {
+        if ( replLine[r] == replLine[r-dr] ) {
+          replLine[r] += replLine[r-dr];
+          replLine[r-dr] = 0;
+          break;
+        }
+      }
+    }
+    /* move */
+    let r = SIZE - 1;
+    for ( let i = SIZE-1; i >= 0; i-- ) {
+      if ( replLine[i] != EMPTYPANEL ) {
+        this.panels[r--][c] = replLine[i];
+      }
+    }
+    while ( r >= 0 ) {
+      this.panels[r--][c] = 0;
+    }
+  }
+
   return ;
 };
 
