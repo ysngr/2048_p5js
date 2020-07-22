@@ -7,30 +7,23 @@ const EMPTYPANEL = 0;
 
 let Model = function() {
   this.panels = [];
-  this.genPanels();
+  this.newPanelRow = -1;
+  this.newPanelCol = -1;
 
-  this.newPanelRow = -1; 
-  this.newPanelColumn = -1; 
-  this.newPanelSize = -1;
+  this.initPanels();
 };
 
 
 
-Model.prototype.genPanels = function() {
+Model.prototype.initPanels = function() {
 
-  /* generate panels */
-  let panelsRow = [];
-  for (let column = 0; column < SIZE; column++) {
-    panelsRow.push(0);
-  }
-  for (let row = 0; row < SIZE; row++) {
-    this.panels.push(panelsRow.concat());
+  this.panels = new Array(SIZE);
+  for ( let r = 0; r < this.panels.length; r++ ) {
+    this.panels[r] = new Array(SIZE).fill(EMPTYPANEL);
   }
 
-  /* put initial panels */
-  for (let i = 0; i < 2; i++) {
+  for ( let i = 0; i < 2; i++ ) {
     this.genNewPanel();
-    this.newPanelSize = BOARD_SIZE / SIZE; // (== PNL_SIZE)
   }
 
   return ;
@@ -39,88 +32,24 @@ Model.prototype.genPanels = function() {
 
 Model.prototype.genNewPanel = function() {
 
+  let r, c;
+
   /* find place for new panel */
   while ( true ) {
-    this.newPanelRow = int(random(0, 4));
-    this.newPanelColumn = int(random(0, 4));
-    if ( this.panels[this.newPanelRow][this.newPanelColumn] == 0 ) {
+    r = int(random(SIZE));
+    c = int(random(SIZE));
+    if ( this.panels[r][c] == EMPTYPANEL ) {
       break;
     }
   }
 
   /* generate new panel */
-  this.panels[this.newPanelRow][this.newPanelColumn] = (random(0, 2) >= 1)? 2 : 4; 
-  this.newPanelSize = 50;
+  this.panels[r][c] = ( random(2) >= 1 )? 2 : 4; 
+  this.newPanelRow = r;
+  this.newPanelCol = c;
 
   return ;
 };
-
-
-//Model.prototype.move = function(direction) {
-
-//  /* preserve previous panels' state */
-//  let prevPanels = this.copyPrevPanels();
-
-//  /* find incremental value */
-//  let incr = (direction == TO_TOP || direction == TO_LEFT)? 1 : -1;
-
-
-//  for (let line = 0; line < SIZE; line++) {
-
-//    /* replicate panels on line */
-//    let replLine = [];
-//    for (let orthLine = 0; orthLine < SIZE; orthLine++) {
-//      replLine.push((direction == TO_TOP || direction == TO_BOTTOM)? this.panels[orthLine][line] : this.panels[line][orthLine]);
-//    }
-
-//    /* addition */
-//    let sumPanelIndex = (direction == TO_TOP || direction == TO_LEFT)? 0 : SIZE-1;  // panel to be added
-//    while( 0 <= sumPanelIndex && sumPanelIndex < SIZE ){
-//      if( replLine[sumPanelIndex] == 0 ){
-//        sumPanelIndex += incr;
-//        continue;
-//      }
-//      /* find terget panel for addition */
-//      let targetPanelIndex = sumPanelIndex + incr;  // panel to marge with sumPanel and become zero
-//      while( replLine[targetPanelIndex] == 0 && 0 <= targetPanelIndex && targetPanelIndex < SIZE ){
-//        targetPanelIndex += incr;
-//      }
-//      /* marge with adjecent panel */
-//      if( 0 <= targetPanelIndex && targetPanelIndex < SIZE && replLine[sumPanelIndex] == replLine[targetPanelIndex] ){
-//        replLine[sumPanelIndex] += replLine[targetPanelIndex];
-//        replLine[targetPanelIndex] = 0;
-//        sumpanelIndex = targetPanelIndex + incr;
-//      }else{
-//        sumPanelIndex += incr;
-//      }
-//    }
-
-//    /* move to selected direction */
-//    let idx = (incr >= 0)? 0 : SIZE-1;
-//    for (let orthLine = idx; 0 <= orthLine && orthLine < SIZE; orthLine += incr) {
-//      if ( replLine[orthLine] != 0 ) {
-//        if ( direction == TO_TOP || direction == TO_BOTTOM ) {  // move vertically
-//          this.panels[idx][line] = replLine[orthLine];
-//        } else {  // move horizontally
-//          this.panels[line][idx] = replLine[orthLine];
-//        }
-//        idx += incr;
-//      }
-//    }
-
-//    /* set value(0) in empty place */
-//    while ( 0 <= idx && idx < SIZE ) {
-//      if ( direction == TO_TOP || direction == TO_BOTTOM ) {
-//        this.panels[idx][line] = 0;
-//      } else {
-//        this.panels[line][idx] = 0;
-//      }
-//      idx += incr;
-//    }
-//  }
-
-//  return this.isPanelMoved(prevPanels);
-//};
 
 
 Model.prototype.move = function(direction) {
@@ -132,6 +61,15 @@ Model.prototype.move = function(direction) {
     console.log(r+":"+(prevPanels[r][0])+"|"+(prevPanels[r][1])+"|"+(prevPanels[r][2])+"|"+(prevPanels[r][3])+"|");
   }
   console.log("\n");
+
+  /*  << TODO >>
+   fix moveTo* functions
+   in case : |2|2|4|4| + (->) ==> |0|0|4|8|
+   */
+  /* << TODO >>
+   integrate moveTo* functions
+   (North+South(vert) and East+West(hriz))
+   */
 
   switch( direction ) {
   case TONORTH :
@@ -322,15 +260,13 @@ Model.prototype.moveToWest = function() {
 
 Model.prototype.copyPrevPanels = function() {
 
-  let prevPanels = [];
-  let prevPanelsRow;
+  let prevPanels = new Array(SIZE);
 
-  for (let row = 0; row < SIZE; row++) {
-    prevPanelsRow = [];
-    for (let column = 0; column < SIZE; column++) {
-      prevPanelsRow.push(this.panels[row][column]);
+  for ( let r = 0; r < SIZE; r++ ) {
+    prevPanels[r] = new Array(SIZE);
+    for ( let c = 0; c < SIZE; c++ ) {
+      prevPanels[r][c] = this.panels[r][c];
     }
-    prevPanels.push(prevPanelsRow);
   }
 
   return prevPanels;
@@ -339,9 +275,9 @@ Model.prototype.copyPrevPanels = function() {
 
 Model.prototype.isPanelMoved = function(prevPanels) {
 
-  for (let row = 0; row < SIZE; row++) {
-    for (let column = 0; column < SIZE; column++) {
-      if ( this.panels[row][column] != prevPanels[row][column] ) {
+  for ( let r = 0; r < SIZE; r++ ) {
+    for ( let c = 0; c < SIZE; c++ ) {
+      if ( this.panels[r][c] != prevPanels[r][c] ) {
         return true;  // some panels are moved
       }
     }
@@ -355,45 +291,43 @@ Model.prototype.isPanelMoved = function(prevPanels) {
 Model.prototype.isGameFinished = function() {
 
   /* search empty place */
-  for (let row = 0; row < SIZE; row++) {
-    for (let column = 0; column < SIZE; column++) {
-      if ( this.panels[row][column] == 0 ) {
-        return false;  // continue
-      }
-    }
-  }
-  /* search pair to be added */
-  for (let row = 0; row < SIZE; row++) {
-    for (let column = 0; column < SIZE; column++) {
-      // vartical
-      if ( row < SIZE -1 ) {
-        if ( this.panels[row][column] == this.panels[row+1][column] ) {
-          return false;  // continue
-        }
-      }
-      // horizontal
-      if ( column < SIZE - 1 ) {
-        if ( this.panels[row][column] == this.panels[row][column+1] ) {
-          return false;  // continue
-        }
+  for ( let r = 0; r < SIZE; r++ ) {
+    for ( let c = 0; c < SIZE; c++ ) {
+      if ( this.panels[r][c] == EMPTYPANEL ) {
+        return false;
       }
     }
   }
 
-  return true;  // end
+  /* search pair to be added */
+  for ( let r = 0; r < SIZE; r++ ) {
+    for ( let c = 0; c < SIZE; c++ ) {
+      // vertical
+      if ( r < SIZE-1 && this.panels[r][c] == this.panels[r+1][c] ) {
+        return false;
+      }
+      // horizontal
+      if ( c < SIZE-1 && this.panels[r][c] == this.panels[r][c+1] ) {
+        return false;
+      }
+    }
+  }
+
+  return true;
 };
 
 
-Model.prototype.getMaxPanel = function() {
+Model.prototype.getMaxPanelNum = function() {
 
-  let max = -1;
-  for (let row = 0; row < SIZE; row++) {
-    for (let column = 0; column < SIZE; column++) {
-      if ( this.panels[row][column] > max ) {
-        max = this.panels[row][column];
+  let maxPanelNum = 0;
+
+  for ( let r = 0; r < SIZE; r++ ) {
+    for ( let c = 0; c < SIZE; c++ ) {
+      if ( this.panels[r][c] > maxPanelNum ) {
+        maxPanelNum = this.panels[r][c];
       }
     }
   }
 
-  return max;
+  return maxPanelNum;
 };

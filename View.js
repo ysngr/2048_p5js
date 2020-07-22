@@ -2,17 +2,23 @@
 //  View
 //====================================================================
 
+/* << TODO >>
+ increasing drawing of new panel
+ */
 
 const GUTTER = 2;
 
 
 let View = function() {
+  this.newPanelSize = 0;  // temp
   textFont("Serif");
 };
 
 
 
 View.prototype.board = function() {
+
+  this.newPanelSize = 50;
 
   for (let row = 0; row < SIZE; row++) {
     for (let column = 0; column < SIZE; column++) {
@@ -25,11 +31,15 @@ View.prototype.board = function() {
       /* panel */
       strokeWeight(1);
       stroke("#000000");  // black
-      if ( row == mdl.newPanelRow && column == mdl.newPanelColumn ) {
+      if ( row == mdl.newPanelRow && column == mdl.newPanelCol ) {
         // draw new panel with panel size increasing
+        /*  << TODO >> 
+         change this code (new panel's size increasing) to loop
+         not use draw() function
+         */
         fill(this.getPanelColor(mdl.panels[row][column]));
-        rect(column*PNL_SIZE+PNL_SIZE/2, row*PNL_SIZE+PNL_SIZE/2, mdl.newPanelSize-GUTTER*2, mdl.newPanelSize-GUTTER*2);
-        mdl.newPanelSize += (mdl.newPanelSize+5 > PNL_SIZE )? 0 : 5;
+        rect(column*PNL_SIZE+PNL_SIZE/2, row*PNL_SIZE+PNL_SIZE/2, this.newPanelSize-GUTTER*2, this.newPanelSize-GUTTER*2);
+        this.newPanelSize += (this.newPanelSize+5 > PNL_SIZE )? 0 : 5;
       } else {
         fill(this.getPanelColor(mdl.panels[row][column]));
         rect(column*PNL_SIZE+PNL_SIZE/2, row*PNL_SIZE+PNL_SIZE/2, PNL_SIZE-GUTTER*2, PNL_SIZE-GUTTER*2);
@@ -140,7 +150,7 @@ View.prototype.finMessage = function() {
   fill("#000000");  // black
   textSize(16);
   textAlign(CENTER, CENTER);
-  text("GAME OVER !\nMax panel : " + mdl.getMaxPanel(), BOARD_SIZE/2, BOARD_SIZE/2);
+  text("GAME OVER !\nMax panel : " + mdl.getMaxPanelNum(), BOARD_SIZE/2, BOARD_SIZE/2);
 
   return ;
 };
