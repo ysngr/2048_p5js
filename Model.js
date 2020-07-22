@@ -155,27 +155,32 @@ Model.prototype.moveToNorth = function() {
       replLine[r] = this.panels[r][c];
     }
     /* addition */
+  ADDLOOP:
     for ( let r = 0; r < SIZE-1; r++ ) {
       if ( replLine[r] == EMPTYPANEL ) {
         continue;
       }
-      for ( let dr = 1; dr < SIZE-r; dr++ ) {
-        if ( replLine[r] == replLine[r+dr] ) {
-          replLine[r] += replLine[r+dr];
-          replLine[r+dr] = 0;
-          break;
+      for ( let nr = r+1; nr < SIZE; nr++ ) {
+        if ( replLine[nr] == EMPTYPANEL ) {
+          continue;
         }
+        if ( replLine[r] == replLine[nr] ) {
+          replLine[r] += replLine[nr];
+          replLine[nr] = 0;
+          break ADDLOOP;
+        }
+        break;
       }
     }
     /* move */
     let r = 0;
-    for ( let i = 0; i < SIZE; i++ ) {
-      if ( replLine[i] != EMPTYPANEL ) {
-        this.panels[r++][c] = replLine[i];
+    for ( let rr = 0; rr < SIZE; rr++ ) {
+      if ( replLine[rr] != EMPTYPANEL ) {
+        this.panels[r++][c] = replLine[rr];
       }
     }
     while ( r < SIZE ) {
-      this.panels[r++][c] = 0;
+      this.panels[r++][c] = EMPTYPANEL;
     }
   }
 
@@ -192,16 +197,21 @@ Model.prototype.moveToSouth = function(direction) {
       replLine[r] = this.panels[r][c];
     }
     /* addition */
-    for ( let r = SIZE-1; r >= 0; r-- ) {
+  ADDLOOP:
+    for ( let r = SIZE-1; r > 0; r-- ) {
       if ( replLine[r] == EMPTYPANEL ) {
         continue;
       }
-      for ( let dr = 1; dr < r; dr++ ) {
-        if ( replLine[r] == replLine[r-dr] ) {
-          replLine[r] += replLine[r-dr];
-          replLine[r-dr] = 0;
-          break;
+      for ( let nr = r-1; nr >= 0; nr-- ) {
+        if ( replLine[nr] == EMPTYPANEL ) {
+          continue;
         }
+        if ( replLine[r] == replLine[nr] ) {
+          replLine[r] += replLine[nr];
+          replLine[nr] = 0;
+          break ADDLOOP;
+        }
+        break;
       }
     }
     /* move */
@@ -212,7 +222,7 @@ Model.prototype.moveToSouth = function(direction) {
       }
     }
     while ( r >= 0 ) {
-      this.panels[r--][c] = 0;
+      this.panels[r--][c] = EMPTYPANEL;
     }
   }
 
