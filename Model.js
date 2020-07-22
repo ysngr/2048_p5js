@@ -129,16 +129,16 @@ Model.prototype.move = function(direction) {
 
   switch( direction ) {
   case TONORTH :
-    this.moveToNorth(prevPanels);
-    break;
-  case TOEAST :
-    this.moveToEast(prevPanels);
+    this.moveToNorth();
     break;
   case TOSOUTH :
-    this.moveToSouth(prevPanels);
+    this.moveToSouth();
+    break;
+  case TOEAST :
+    this.moveToEast();
     break;
   case TOWEST :
-    this.moveToWest(prevPanels);
+    this.moveToWest();
     break;
   }
 
@@ -188,7 +188,7 @@ Model.prototype.moveToNorth = function() {
 };
 
 
-Model.prototype.moveToSouth = function(direction) {
+Model.prototype.moveToSouth = function() {
 
   for ( let c = 0; c < SIZE; c++ ) {
     /* replicate panels on c-th column */
@@ -216,9 +216,9 @@ Model.prototype.moveToSouth = function(direction) {
     }
     /* move */
     let r = SIZE - 1;
-    for ( let i = SIZE-1; i >= 0; i-- ) {
-      if ( replLine[i] != EMPTYPANEL ) {
-        this.panels[r--][c] = replLine[i];
+    for ( let rr = SIZE-1; rr >= 0; rr-- ) {
+      if ( replLine[rr] != EMPTYPANEL ) {
+        this.panels[r--][c] = replLine[rr];
       }
     }
     while ( r >= 0 ) {
@@ -230,12 +230,86 @@ Model.prototype.moveToSouth = function(direction) {
 };
 
 
-Model.prototype.moveToEast = function(direction) {
+Model.prototype.moveToEast = function() {
+
+  for ( let r = 0; r < SIZE; r++ ) {
+    /* replicate panels on r-th row */
+    let replLine = new Array(SIZE);
+    for ( let c = 0; c < replLine.length; c++ ) {
+      replLine[c] = this.panels[r][c];
+    }
+    /* addition */
+  ADDLOOP:
+    for ( let c = SIZE-1; c > 0; c-- ) {
+      if ( replLine[c] == EMPTYPANEL ) {
+        continue;
+      }
+      for ( let nc = c-1; nc >= 0; nc-- ) {
+        if ( replLine[nc] == EMPTYPANEL ) {
+          continue;
+        }
+        if ( replLine[c] == replLine[nc] ) {
+          replLine[c] += replLine[nc];
+          replLine[nc] = 0;
+          break ADDLOOP;
+        }
+        break;
+      }
+    }
+    /* move */
+    let c = SIZE - 1;
+    for ( let rc = SIZE-1; rc >= 0; rc-- ) {
+      if ( replLine[rc] != EMPTYPANEL ) {
+        this.panels[r][c--] = replLine[rc];
+      }
+    }
+    while ( c >= 0 ) {
+      this.panels[r][c--] = EMPTYPANEL;
+    }
+  }
+
   return ;
 };
 
 
-Model.prototype.moveToWest = function(direction) {
+Model.prototype.moveToWest = function() {
+
+  for ( let r = 0; r < SIZE; r++ ) {
+    /* replicate panels on r-th row */
+    let replLine = new Array(SIZE);
+    for ( let c = 0; c < replLine.length; c++ ) {
+      replLine[c] = this.panels[r][c];
+    }
+    /* addition */
+  ADDLOOP:
+    for ( let c = 0; c < SIZE-1; c++ ) {
+      if ( replLine[c] == EMPTYPANEL ) {
+        continue;
+      }
+      for ( let nc = c+1; nc < SIZE; nc++ ) {
+        if ( replLine[nc] == EMPTYPANEL ) {
+          continue;
+        }
+        if ( replLine[c] == replLine[nc] ) {
+          replLine[c] += replLine[nc];
+          replLine[nc] = 0;
+          break ADDLOOP;
+        }
+        break;
+      }
+    }
+    /* move */
+    let c = 0;
+    for ( let rc = 0; rc < SIZE; rc++ ) {
+      if ( replLine[rc] != EMPTYPANEL ) {
+        this.panels[r][c++] = replLine[rc];
+      }
+    }
+    while ( c < SIZE ) {
+      this.panels[r][c++] = EMPTYPANEL;
+    }
+  }
+
   return ;
 };
 
