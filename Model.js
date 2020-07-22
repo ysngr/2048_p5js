@@ -127,6 +127,12 @@ Model.prototype.move = function(direction) {
 
   let prevPanels = this.copyPrevPanels();
 
+  // debug log print
+  for ( let r = 0; r < SIZE; r++ ) {
+    console.log(r+":"+(prevPanels[r][0])+"|"+(prevPanels[r][1])+"|"+(prevPanels[r][2])+"|"+(prevPanels[r][3])+"|");
+  }
+  console.log("\n");
+
   switch( direction ) {
   case TONORTH :
     this.moveToNorth();
