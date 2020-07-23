@@ -287,6 +287,15 @@ Model.prototype.isPanelMoved = function(prevPanels) {
 };
 
 
+Model.prototype.isNewPanelIndex = function(r, c) {
+  return ( r == this.newPanelRow && c == this.newPanelCol );
+};
+
+
+Model.prototype.getPanelNumAt = function(r, c) {
+  return this.panels[r][c];
+};
+
 
 Model.prototype.isGameFinished = function() {
 
@@ -330,4 +339,19 @@ Model.prototype.getMaxPanelNum = function() {
   }
 
   return maxPanelNum;
+};
+
+
+
+
+
+//=========================================================
+//  debug functions
+//=========================================================
+Model.prototype.debug_setBeforeEnd = function() {
+  this.panels[0] = [2, 4, 8, 16];
+  this.panels[1] = [32, 64, 128, 256];
+  this.panels[2] = [512, 1024, 2048, 4096];
+  this.panels[3] = [0, 8, 16, 32];
+  return ;
 };

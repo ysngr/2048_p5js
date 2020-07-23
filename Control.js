@@ -30,6 +30,7 @@ function keyPressed() {
 
   if ( isPanelMoved ) {
     mdl.genNewPanel();
+    view.initNewPanelSize();
   }
 
   return false;  // prevent default
