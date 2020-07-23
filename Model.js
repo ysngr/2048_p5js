@@ -352,6 +352,7 @@ Model.prototype.debug_setBeforeEnd = function() {
   this.panels[0] = [2, 4, 8, 16];
   this.panels[1] = [32, 64, 128, 256];
   this.panels[2] = [512, 1024, 2048, 4096];
-  this.panels[3] = [0, 8, 16, 32];
+  //this.panels[2] = [65536, 131072, 262144, 524288];
+  this.panels[3] = [8192, 16384, 32768, 0];
   return ;
 };

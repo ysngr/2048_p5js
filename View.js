@@ -33,12 +33,12 @@ View.prototype.panel = function(r, c) {
 
   let d;
 
-  strokeWeight(1);
+  strokeWeight(1.2);
   stroke(FRAMECOLOR);
 
   if ( mdl.isNewPanelIndex(r, c) && this.newPanelSize < PANELSIZE ) {
     d = (PANELSIZE - this.newPanelSize) / 2;
-    fill("#696969");  // background color = empty panel color
+    fill(FRAMECOLOR);
     rect(c*PANELSIZE, r*PANELSIZE, PANELSIZE, PANELSIZE);
     noStroke();
     fill(this.getPanelColor(mdl.getPanelNumAt(r, c)));
@@ -55,8 +55,7 @@ View.prototype.panel = function(r, c) {
 
 View.prototype.figure = function(r, c) {
 
-  const fillColorDict = ["#000000", "#000000", "#FFFFFF", "#000000"];
-  const textSizeDict = [50, 40, 25, 20];
+  const textSizeDict = [50, 40, 30, 25, 20, 18];
 
   let panelNum, index;
 
@@ -66,7 +65,7 @@ View.prototype.figure = function(r, c) {
     index = -1;
     for ( let n = panelNum; n > 0; n = int(n/10), index++ );
     textSize(textSizeDict[index]);
-    fill(fillColorDict[index]);
+    fill(( index < 2 )? "#000000" : "#FFFFFF");
     text(panelNum, (c+0.5)*PANELSIZE, (r+0.6)*PANELSIZE);
   }
 
@@ -76,28 +75,24 @@ View.prototype.figure = function(r, c) {
 
 View.prototype.getPanelColor = function(panelNum) {
 
-  const colorDict = [
-    "#D3D3D3", "#A0D8EF", "#CEE4AE", "#BBBCDA", "#D6C6AF", "#D9A62E", 
-    "#68BE8D", "#028760", "#5654A2", "#0095D9", "#F39800", "#E2041B", 
-    "#AA4C8F", "#9F6F55"
+  const colorDict = [  // TODO
+    "#E5E6E6", "#BBCFE4", "#DAD2E4", "#C7D1DC", "#E9E4DA", "#E8F0EB", "#F4A358", /* 0 ~ 64 */
+    "#B81B30", "#724E87", "#33662B", /* 128 ~ 512 */
+   "#457DA8", "#405C7D", "#97CACF", "#9CAEBC"  /* 1024 ~ 8192 */
   ];
 
   let index = this.binlog(panelNum);
 
-  return ( index < colorDict.length )? colorDict[index] : "#EEBBCB";
+  return ( index < colorDict.length )? colorDict[index] : "#272B58";
 };
 
 
 View.prototype.binlog = function(n) {
 
-  if ( n == 0 ) {
-    return 0;
-  }
-
   let logn;
   for ( logn = 0; n > 0; n = (int)(n/2), logn++ );
 
-  return (int)(logn-1);
+  return max(0, (int)(logn-1));
 };
 
 
@@ -112,17 +107,17 @@ View.prototype.finMessage = function() {
   this.newPanelSize = PANELSIZE;
   this.board();
 
-  /* fin-message panel */
-  strokeWeight(5);
-  stroke("#E6E6FA");  // lavender
-  fill(255, 255, 255, 220);
+  /* front panel */
+  strokeWeight(3);
+  stroke("#E6E6FA");
+  fill("#FFFFFFEB");
   rect(0, 0, BOARDSIZE, BOARDSIZE);
 
   /* message */
   noStroke();
-  fill("#000000");  // black
-  textSize(16);
-  text("GAME OVER !\nMax panel : " + mdl.getMaxPanelNum(), BOARDSIZE/2, BOARDSIZE/2);
+  fill("#000000");
+  textSize(18);
+  text("Game Over !\nMax number = " + mdl.getMaxPanelNum(), BOARDSIZE/2, BOARDSIZE/2);
 
   return ;
 };
