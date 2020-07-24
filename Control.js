@@ -12,6 +12,62 @@ let Control = function() {
 
 
 
+Control.prototype.setTouchStart = function(x, y) {
+
+  this.touchStartX = x;
+  this.touchStartY = y;
+
+  return ;
+};
+
+
+Control.prototype.keyCodeToMovegen = function(kCode) {
+
+  let moveDir;
+
+  switch( kCode ) {
+  case UP_ARROW :
+    moveDir = TONORTH;
+    break;
+  case DOWN_ARROW : 
+    moveDir = TOSOUTH;
+    break;
+  case LEFT_ARROW : 
+    moveDir = TOWEST;
+    break;
+  case RIGHT_ARROW : 
+    moveDir = TOEAST;
+    break;
+  default : 
+    return ;
+  }
+
+  this.movegen(moveDir);
+
+  return ;
+};
+
+
+Control.prototype.touchToMovegen = function(touchEndX, touchEndY) {
+
+  let moveDir;
+  let diffX = abs(touchEndX - this.touchStartX);
+  let diffY = abs(touchEndY - this.touchStartY);
+
+  if ( mag(diffX, diffY) > 10 ) {
+    if ( diffX >= diffY ) {
+      moveDir = ( touchEndX < this.touchStartX )? TOWEST : TOEAST;
+    } else {
+      moveDir = ( touchEndY < this.touchStartY )? TONORTH : TOSOUTH;
+    }
+  }
+
+  this.movegen(moveDir);
+
+  return ;
+};
+
+
 Control.prototype.movegen = function(moveDir) {
 
   if ( mdl.move(moveDir) ) {
@@ -23,48 +79,10 @@ Control.prototype.movegen = function(moveDir) {
 };
 
 
-Control.prototype.setTouchStart = function(x, y) {
-
-  this.touchStartX = x;
-  this.touchStartY = y;
-
-  return ;
-};
-
-Control.prototype.getTouchStartX = function() {
-  return this.touchStartX;
-};
-
-Control.prototype.getTouchStartY = function() {
-  return this.touchStartY;
-};
-
-
 
 function keyPressed() {
 
-  let moveDir;
-
-  switch( keyCode ) {
-  case UP_ARROW :
-  case 'k' :
-    moveDir = TONORTH;
-    break;
-  case DOWN_ARROW : 
-  case 'j' :
-    moveDir = TOSOUTH;
-    break;
-  case LEFT_ARROW : 
-  case 'h' :
-    moveDir = TOWEST;
-    break;
-  case RIGHT_ARROW : 
-  case 'l' :
-    moveDir = TOEAST;
-    break;
-  }
-
-  ctrl.movegen(moveDir);
+  ctrl.keyCodeToMovegen(keyCode);
 
   return false;  // prevent default
 }
@@ -80,21 +98,7 @@ function touchStarted() {
 
 function touchEnded() {
 
-  let touchStartX = ctrl.getTouchStartX();
-  let touchStartY = ctrl.getTouchStartY();
-  let diffX = abs(mouseX - touchStartX);
-  let diffY = abs(mouseY - touchStartY);
-  let moveDir;
-
-  if ( mag(diffX, diffY) > 10 ) {
-    if ( diffX >= diffY ) {
-      moveDir = ( mouseX < touchStartX )? TOWEST : TOEAST;
-    } else {
-      moveDir = ( mouseY < touchStartY )? TONORTH : TOSOUTH;
-    }
-  }
-
-  ctrl.movegen(moveDir);
+  ctrl.touchToMovegen(mouseX, mouseY);
 
   return false;  // prevent default
 }
