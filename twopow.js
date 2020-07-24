@@ -23,5 +23,6 @@ function draw() {
   view.board();
   if ( mdl.isGameFinished() ) {
     view.finMessage();
+    noLoop();
   }
 }
