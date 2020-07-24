@@ -2,48 +2,59 @@
 //  Control
 //====================================================================
 
-
-//const TO_TOP = 1, TO_BOTTOM = -1; 
-//const TO_LEFT = 2, TO_RIGHT = -2;
 const TONORTH = 1, TOEAST = 2, TOSOUTH = 3, TOWEST = 4;
+
+
+let Control = function() {
+  this.touchStartX = -1;
+  this.touchStartY = -1;
+  this.moveDir = -1;
+};
+
+
+
+Control.prototype.movegen = function() {
+
+  if ( mdl.move(moveDir) ) {
+    mdl.genNewPanel();
+    view.initNewPanelSize();
+  }
+
+  return ;
+};
 
 
 function keyPressed() {
 
-  let isPanelMoved;
   switch( keyCode ) {
-  case UP_ARROW : 
-    isPanelMoved = mdl.move(TONORTH); 
-    break; 
+  case UP_ARROW :
+  case 'k' :
+    moveDir = TONORTH;
+    break;
   case DOWN_ARROW : 
-    isPanelMoved = mdl.move(TOSOUTH); 
+  case 'j' :
+    moveDir = TOSOUTH; 
     break;
   case LEFT_ARROW : 
-    isPanelMoved = mdl.move(TOWEST); 
+  case 'h' :
+    moveDir = TOWEST; 
     break;
   case RIGHT_ARROW : 
-    isPanelMoved = mdl.move(TOEAST); 
+  case 'l' :
+    moveDir = TOEAST; 
     break;
-  default : 
-    isPanelMoved = false;
   }
 
-  if ( isPanelMoved ) {
-    mdl.genNewPanel();
-    view.initNewPanelSize();
-  }
+  ctrl.movegen();
 
   return false;  // prevent default
 }
 
 
-/* for smartphone */
-let touchStartX, touchStartY;
-
 function touchStarted() {
 
-  touchStartX = mouseX;
-  touchStartY = mouseY;
+  this.touchStartX = mouseX;
+  this.touchStartY = mouseY;
 
   return false;  // prevent default
 }
@@ -54,26 +65,15 @@ function touchEnded() {
   let diffX = abs(mouseX - touchStartX);
   let diffY = abs(mouseY - touchStartY);
 
-  let isPanelMoved;
-  if ( diffX < 10 && diffY < 10 ) {
-    return ;
-  } else if ( diffX < diffY ) {
-    if ( mouseY < touchStartY ) {
-      isPanelMoved = mdl.move(TO_TOP);
+  if ( mag(diffX, diffY) > 10 ) {
+    if ( diffX >= diffY ) {
+      this.moveDir = ( mouseX < this.touchStartX )? TOWEST : TOEAST;
     } else {
-      isPanelMoved = mdl.move(TO_BOTTOM);
-    }
-  } else if ( diffX > diffY ) {
-    if ( mouseX < touchStartX ) {
-      isPanelMoved = mdl.move(TO_LEFT);
-    } else {
-      isPanelMoved = mdl.move(TO_RIGHT);
+      this.moveDir = ( mouseY < this.touchStartY )? TONORTH : TOSOUTH;
     }
   }
 
-  if ( isPanelMoved ) {
-    mdl.genNewPanel();
-  }
+  ctrl.movegen();
 
   return false;  // prevent default
 }

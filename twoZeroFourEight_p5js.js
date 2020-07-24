@@ -7,13 +7,14 @@ const CANVASSIZE = BOARDSIZE + 2*BOARDGUTTER;
 const PANELSIZE = BOARDSIZE / SIZE;
 
 
-let mdl, view;
+let mdl, view, ctrl;
 
 
 function setup() {  
   createCanvas(CANVASSIZE, CANVASSIZE);
   mdl = new Model();
   view = new View();
+  ctrl = new Control();
   //mdl.debug_setBeforeEnd();
   //mdl.debug_setPair();
 }
