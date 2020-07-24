@@ -81,7 +81,9 @@ Control.prototype.movegen = function(moveDir) {
 
 function keyPressed() {
 
-  ctrl.keyCodeToMovegen(keyCode);
+  if ( mdl.isEventExec() ) {
+    ctrl.keyCodeToMovegen(keyCode);
+  }
 
   return false;  // prevent default
 }
@@ -89,7 +91,9 @@ function keyPressed() {
 
 function touchStarted() {
 
-  ctrl.setTouchStart(mouseX, mouseY);
+  if ( mdl.isEventExec() ) {
+    ctrl.setTouchStart(mouseX, mouseY);
+  }
 
   return false;  // prevent default
 }
@@ -97,7 +101,9 @@ function touchStarted() {
 
 function touchEnded() {
 
-  ctrl.touchToMovegen(mouseX, mouseY);
+  if ( mdl.isEventExec() ) {
+    ctrl.touchToMovegen(mouseX, mouseY);
+  }
 
   return false;  // prevent default
 }

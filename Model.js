@@ -9,6 +9,7 @@ let Model = function() {
   this.panels = [];
   this.newPanelRow = -1;
   this.newPanelCol = -1;
+  this.eventExec = true;
 
   this.initPanels();
 };
@@ -319,6 +320,8 @@ Model.prototype.isGameFinished = function() {
     }
   }
 
+  /* lock event exec */
+  this.lockEvent();
 
   return true;
 };
@@ -339,6 +342,18 @@ Model.prototype.getMaxPanelNum = function() {
   return maxPanelNum;
 };
 
+
+Model.prototype.lockEvent = function() {
+
+  this.eventExec = false;
+
+  return ;
+};
+
+
+Model.prototype.isEventExec = function() {
+  return this.eventExec;
+};
 
 
 
