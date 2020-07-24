@@ -56,7 +56,7 @@ Model.prototype.move = function(moveDir) {
 
   let prevPanels = this.copyPanels();
 
-  this.debug_printBoardLog();  // debug print
+  //this.debug_printBoardLog();  // debug print
 
   switch( moveDir ) {
   case TONORTH :
