@@ -54,13 +54,9 @@ Model.prototype.genNewPanel = function() {
 
 Model.prototype.move = function(moveDir) {
 
-  let prevPanels = this.copyPrevPanels();
+  let prevPanels = this.copyPanels();
 
-  // debug log print
-  for ( let r = 0; r < SIZE; r++ ) {
-    console.log(r+": "+(prevPanels[r][0])+"|"+(prevPanels[r][1])+"|"+(prevPanels[r][2])+"|"+(prevPanels[r][3])+"|");
-  }
-  console.log("\n");
+  this.debug_printBoardLog();  // debug print
 
   switch( moveDir ) {
   case TONORTH :
@@ -245,18 +241,18 @@ Model.prototype.moveToWest = function() {
 };
 
 
-Model.prototype.copyPrevPanels = function() {
+Model.prototype.copyPanels = function() {
 
-  let prevPanels = new Array(SIZE);
+  let cpanels = new Array(SIZE);
 
   for ( let r = 0; r < SIZE; r++ ) {
-    prevPanels[r] = new Array(SIZE);
+    cpanels[r] = new Array(SIZE);
     for ( let c = 0; c < SIZE; c++ ) {
-      prevPanels[r][c] = this.panels[r][c];
+      cpanels[r][c] = this.panels[r][c];
     }
   }
 
-  return prevPanels;
+  return cpanels;
 };
 
 
@@ -350,6 +346,14 @@ Model.prototype.getMaxPanelNum = function() {
 //=========================================================
 //  debug functions
 //=========================================================
+Model.prototype.debug_printBoardLog = function() {
+  for ( let r = 0; r < SIZE; r++ ) {
+    console.log(r+": "+(this.panels[r][0])+"|"+(this.panels[r][1])+"|"+(this.panels[r][2])+"|"+(this.panels[r][3])+"|");
+  }
+  console.log("\n");
+  return ;
+};
+
 Model.prototype.debug_setBeforeEnd = function() {
   this.panels[0] = [2, 4, 8, 16];
   this.panels[1] = [32, 64, 128, 256];

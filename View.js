@@ -55,13 +55,14 @@ View.prototype.panel = function(r, c) {
 
 View.prototype.figure = function(r, c) {
 
-  const textSizeDict = [50, 40, 30, 25, 20, 18];
+  const textSizeDict = [-1, 42, 40, 30, 25, 20, 18];
 
   let index;
 
   if ( (index = mdl.getPanelDigitAt(r, c)) > 0 ) {
+    noStroke();
+    fill(( index < 3 )? "#000000" : "#FFFFFF");
     textSize(textSizeDict[index]);
-    fill(( index < 2 )? "#000000" : "#FFFFFF");
     text(mdl.getPanelNumAt(r, c), (c+0.5)*PANELSIZE, (r+0.6)*PANELSIZE);
   }
 
@@ -71,10 +72,11 @@ View.prototype.figure = function(r, c) {
 
 View.prototype.getPanelColor = function(panelNum) {
 
-  const colorDict = [  // TODO
-    "#E5E6E6", "#BBCFE4", "#DAD2E4", "#C7D1DC", "#E9E4DA", "#E8F0EB", "#F4A358", /* 0 ~ 64 */
-    "#B81B30", "#724E87", "#33662B", /* 128 ~ 512 */
-   "#457DA8", "#405C7D", "#97CACF", "#9CAEBC"  /* 1024 ~ 8192 */
+  const colorDict = [
+    "#E5E6E6", "#BBCFE4", "#DAD2E4", "#A6E8C5", // 0 ~ 8
+    "#DDF29F", "#F7BED9", "#E8D485", // 16 ~ 64 
+    "#5EC125", "#E3259D", "#F58123", // 128 ~ 512
+    "#457DA8", "#88BC06", "#35C9DB", "#9B3A91"  // 1024 ~ 8192 
   ];
 
   let index = this.binlog(panelNum);

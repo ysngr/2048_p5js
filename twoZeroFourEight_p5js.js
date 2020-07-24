@@ -15,8 +15,6 @@ function setup() {
   mdl = new Model();
   view = new View();
   ctrl = new Control();
-  //mdl.debug_setBeforeEnd();
-  //mdl.debug_setPair();
 }
 
 
