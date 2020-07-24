@@ -99,7 +99,6 @@ Model.prototype.moveToNorth = function() {
       replLine[r] = this.panels[r][c];
     }
     /* addition */
-  ADDLOOP:
     for ( let r = 0; r < SIZE-1; r++ ) {
       if ( replLine[r] == EMPTYPANEL ) {
         continue;
@@ -111,7 +110,7 @@ Model.prototype.moveToNorth = function() {
         if ( replLine[r] == replLine[nr] ) {
           replLine[r] += replLine[nr];
           replLine[nr] = 0;
-          break ADDLOOP;
+          r = nr;
         }
         break;
       }
@@ -141,7 +140,6 @@ Model.prototype.moveToSouth = function() {
       replLine[r] = this.panels[r][c];
     }
     /* addition */
-  ADDLOOP:
     for ( let r = SIZE-1; r > 0; r-- ) {
       if ( replLine[r] == EMPTYPANEL ) {
         continue;
@@ -153,7 +151,7 @@ Model.prototype.moveToSouth = function() {
         if ( replLine[r] == replLine[nr] ) {
           replLine[r] += replLine[nr];
           replLine[nr] = 0;
-          break ADDLOOP;
+          r = nr;
         }
         break;
       }
@@ -183,7 +181,6 @@ Model.prototype.moveToEast = function() {
       replLine[c] = this.panels[r][c];
     }
     /* addition */
-  ADDLOOP:
     for ( let c = SIZE-1; c > 0; c-- ) {
       if ( replLine[c] == EMPTYPANEL ) {
         continue;
@@ -195,7 +192,7 @@ Model.prototype.moveToEast = function() {
         if ( replLine[c] == replLine[nc] ) {
           replLine[c] += replLine[nc];
           replLine[nc] = 0;
-          break ADDLOOP;
+          c = nc;
         }
         break;
       }
@@ -225,7 +222,6 @@ Model.prototype.moveToWest = function() {
       replLine[c] = this.panels[r][c];
     }
     /* addition */
-  ADDLOOP:
     for ( let c = 0; c < SIZE-1; c++ ) {
       if ( replLine[c] == EMPTYPANEL ) {
         continue;
@@ -237,7 +233,7 @@ Model.prototype.moveToWest = function() {
         if ( replLine[c] == replLine[nc] ) {
           replLine[c] += replLine[nc];
           replLine[nc] = 0;
-          break ADDLOOP;
+          c = nc;
         }
         break;
       }
@@ -354,5 +350,21 @@ Model.prototype.debug_setBeforeEnd = function() {
   this.panels[2] = [512, 1024, 2048, 4096];
   //this.panels[2] = [65536, 131072, 262144, 524288];
   this.panels[3] = [8192, 16384, 32768, 0];
+  return ;
+};
+
+Model.prototype.debug_setPair = function() {
+  this.panels[0] = [2, 2, 4, 4];
+  this.panels[1] = [2, 2, 4, 4];
+  this.panels[2] = [2, 2, 4, 4];
+  this.panels[3] = [2, 2, 4, 4];
+  return ;
+};
+
+Model.prototype.debug_setPair2 = function() {
+  this.panels[0] = [2, 2, 4, 4];
+  this.panels[1] = [4, 4, 2, 2];
+  this.panels[2] = [4, 4, 2, 2];
+  this.panels[3] = [2, 2, 4, 4];
   return ;
 };

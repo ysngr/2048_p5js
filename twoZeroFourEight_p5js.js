@@ -14,7 +14,8 @@ function setup() {
   createCanvas(CANVASSIZE, CANVASSIZE);
   mdl = new Model();
   view = new View();
-  mdl.debug_setBeforeEnd();
+  //mdl.debug_setBeforeEnd();
+  mdl.debug_setPair2();
 }
 
 
