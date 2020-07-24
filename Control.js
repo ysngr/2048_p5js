@@ -60,9 +60,8 @@ Control.prototype.touchToMovegen = function(touchEndX, touchEndY) {
     } else {
       moveDir = ( touchEndY < this.touchStartY )? TONORTH : TOSOUTH;
     }
+    this.movegen(moveDir);
   }
-
-  this.movegen(moveDir);
 
   return ;
 };
