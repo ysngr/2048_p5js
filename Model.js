@@ -2,7 +2,7 @@
 //  Model
 //====================================================================
 
-const EMPTYPANEL = 0;
+const EMPTYPANEL = 1;
 
 
 let Model = function() {
@@ -100,7 +100,7 @@ Model.prototype.moveToNorth = function() {
         }
         if ( replLine[r] == replLine[nr] ) {
           replLine[r] += replLine[nr];
-          replLine[nr] = 0;
+          replLine[nr] = EMPTYPANEL;
           r = nr;
         }
         break;
@@ -141,7 +141,7 @@ Model.prototype.moveToSouth = function() {
         }
         if ( replLine[r] == replLine[nr] ) {
           replLine[r] += replLine[nr];
-          replLine[nr] = 0;
+          replLine[nr] = EMPTYPANEL;
           r = nr;
         }
         break;
@@ -182,7 +182,7 @@ Model.prototype.moveToEast = function() {
         }
         if ( replLine[c] == replLine[nc] ) {
           replLine[c] += replLine[nc];
-          replLine[nc] = 0;
+          replLine[nc] = EMPTYPANEL;
           c = nc;
         }
         break;
@@ -223,7 +223,7 @@ Model.prototype.moveToWest = function() {
         }
         if ( replLine[c] == replLine[nc] ) {
           replLine[c] += replLine[nc];
-          replLine[nc] = 0;
+          replLine[nc] = EMPTYPANEL;
           c = nc;
         }
         break;
@@ -284,6 +284,20 @@ Model.prototype.getPanelNumAt = function(r, c) {
 };
 
 
+Model.prototype.getPanelDigitAt = function(r, c) {
+
+  let num, digit;
+
+  if ( (num = this.panels[r][c]) == EMPTYPANEL ) {
+    return 0;  // EMPTYPANEL digit is difined as 0
+  }
+
+  for ( digit = 0; num > 0; num = int(num/10), digit++ );
+
+  return digit;
+};
+
+
 Model.prototype.isGameFinished = function() {
 
   /* search empty place */
@@ -340,7 +354,7 @@ Model.prototype.debug_setBeforeEnd = function() {
   this.panels[1] = [32, 64, 128, 256];
   this.panels[2] = [512, 1024, 2048, 4096];
   //this.panels[2] = [65536, 131072, 262144, 524288];
-  this.panels[3] = [8192, 16384, 32768, 0];
+  this.panels[3] = [8192, 16384, 32768, EMPTYPANEL];
   return ;
 };
 

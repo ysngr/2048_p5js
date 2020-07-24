@@ -15,7 +15,7 @@ function setup() {
   mdl = new Model();
   view = new View();
   //mdl.debug_setBeforeEnd();
-  mdl.debug_setPair2();
+  //mdl.debug_setPair();
 }
 
 

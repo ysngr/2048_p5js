@@ -8,6 +8,7 @@ const FRAMECOLOR = "#696969";
 
 let View = function() {
   this.newPanelSize = PANELSIZE;
+
   textFont("Serif");
   textAlign(CENTER, CENTER);
 };
@@ -57,16 +58,12 @@ View.prototype.figure = function(r, c) {
 
   const textSizeDict = [50, 40, 30, 25, 20, 18];
 
-  let panelNum, index;
+  let index;
 
-  panelNum = mdl.getPanelNumAt(r, c);
-
-  if ( panelNum > 0 ) {
-    index = -1;
-    for ( let n = panelNum; n > 0; n = int(n/10), index++ );
+  if ( (index = mdl.getPanelDigitAt(r, c)) > 0 ) {
     textSize(textSizeDict[index]);
     fill(( index < 2 )? "#000000" : "#FFFFFF");
-    text(panelNum, (c+0.5)*PANELSIZE, (r+0.6)*PANELSIZE);
+    text(mdl.getPanelNumAt(r, c), (c+0.5)*PANELSIZE, (r+0.6)*PANELSIZE);
   }
 
   return ;
@@ -90,14 +87,18 @@ View.prototype.getPanelColor = function(panelNum) {
 View.prototype.binlog = function(n) {
 
   let logn;
-  for ( logn = 0; n > 0; n = (int)(n/2), logn++ );
 
-  return max(0, (int)(logn-1));
+  for ( logn = 0; n > 1; n = int(n/2), logn++ );
+
+  return (int)(logn);
 };
 
 
 View.prototype.initNewPanelSize = function() {
+
   this.newPanelSize = INITNEWPANELSIZE;
+
+  return ;
 };
 
 
