@@ -1,26 +1,25 @@
-/* 2048 (p5.js) */
 
-
-const BOARD_SIZE = 300;
-const CANVAS_SIZE = BOARD_SIZE + 30;
 const SIZE = 4;
-const PNL_SIZE = BOARD_SIZE / SIZE;
+
+const BOARDSIZE = 300;
+const BOARDGUTTER = 15;
+const CANVASSIZE = BOARDSIZE + 2*BOARDGUTTER;
+const PANELSIZE = BOARDSIZE / SIZE;
 
 
-let mdl, view;
-
+let mdl, view, ctrl;
 
 
 function setup() {  
-  createCanvas(CANVAS_SIZE, CANVAS_SIZE);
-  background("#FFFFFF");
+  createCanvas(CANVASSIZE, CANVASSIZE);
   mdl = new Model();
   view = new View();
+  ctrl = new Control();
 }
 
 
 function draw() {
-  translate(15, 15);
+  translate(BOARDGUTTER, BOARDGUTTER);
   view.board();
   if ( mdl.isGameFinished() ) {
     view.finMessage();

@@ -3,64 +3,23 @@
 //====================================================================
 
 
-const GUTTER = 2;
-
-
 let View = function() {
+  this.newPanelSize = PANELSIZE;
+
   textFont("Serif");
+  textAlign(CENTER, CENTER);
 };
 
 
 
 View.prototype.board = function() {
 
-  for (let row = 0; row < SIZE; row++) {
-    for (let column = 0; column < SIZE; column++) {
+  background("#FFFFFF");
 
-      rectMode(CENTER);
-      /* frame */
-      noStroke();
-      fill(this.getPanelColor(-1));
-      rect(column*PNL_SIZE+PNL_SIZE/2, row*PNL_SIZE+PNL_SIZE/2, PNL_SIZE, PNL_SIZE);
-      /* panel */
-      strokeWeight(1);
-      stroke("#000000");  // black
-      if ( row == mdl.newPanelRow && column == mdl.newPanelColumn ) {
-        // draw new panel with panel size increasing
-        fill(this.getPanelColor(mdl.panels[row][column]));
-        rect(column*PNL_SIZE+PNL_SIZE/2, row*PNL_SIZE+PNL_SIZE/2, mdl.newPanelSize-GUTTER*2, mdl.newPanelSize-GUTTER*2);
-        mdl.newPanelSize += (mdl.newPanelSize+5 > PNL_SIZE )? 0 : 5;
-      } else {
-        fill(this.getPanelColor(mdl.panels[row][column]));
-        rect(column*PNL_SIZE+PNL_SIZE/2, row*PNL_SIZE+PNL_SIZE/2, PNL_SIZE-GUTTER*2, PNL_SIZE-GUTTER*2);
-      }      
-
-      /* figure */
-      if ( mdl.panels[row][column] != 0 ) {
-        if ( mdl.panels[row][column] < 100 ) {  // digit = 1
-          strokeWeight(1);
-          stroke("#000000");  // black
-          fill("#000000");  // black
-          textSize(50);
-        } else if ( mdl.panels[row][column] < 1000 ) {  // digit = 2
-          strokeWeight(1);
-          stroke("#FFFFFF");  // white
-          fill("#FFFFFF");  // white
-          textSize(30);
-        } else if ( mdl.panels[row][column] < 10000 ) {  // digit = 3
-          strokeWeight(1);
-          stroke("#FFFFFF");  // white
-          fill("#FFFFFF");  // white
-          textSize(25);
-        } else {  // digit >= 4
-          strokeWeight(1);
-          stroke("#000000");  // black
-          fill("#000000");  // white
-          textSize(20);
-        }
-        textAlign(CENTER, CENTER);
-        text(mdl.panels[row][column], column*PNL_SIZE+PNL_SIZE/2, row*PNL_SIZE+PNL_SIZE/1.5);
-      }
+  for ( let r = 0; r < SIZE; r++ ) {
+    for ( let c = 0; c < SIZE; c++ ) {
+      this.panel(r, c);
+      this.figure(r, c);
     }
   }
 
@@ -68,79 +27,99 @@ View.prototype.board = function() {
 };
 
 
-View.prototype.getPanelColor = function(value) {
+View.prototype.panel = function(r, c) {
 
-  let pnlCol;
-  switch(value) {
-  case -1 :  // frame color
-    pnlCol = color("#696969");  // dimgray
-    break;
-  case 0 :   // empty panel color
-    pnlCol = color("#D3D3D3");  // frosty white
-    break;
-  case 2 : 
-    pnlCol = color("#A0D8EF");  // sora
-    break;
-  case 4 : 
-    pnlCol = color("#CEE4AE");  // natsumushi
-    break;
-  case 8 : 
-    pnlCol = color("#BBBCDA");  // huji
-    break;
-  case 16 : 
-    pnlCol = color("#D6C6AF");  // ama
-    break; 
-  case 32 : 
-    pnlCol = color("#D9A62E");  // hajizome
-    break;
-  case 64 : 
-    pnlCol = color("#68BE8D");  // wakatake
-    break;  
-  case 128 : 
-    pnlCol = color("#028760");  // tokiwa midori
-    break; 
-  case 256 : 
-    pnlCol = color("#5654A2");  // kikyo
-    break; 
-  case 512 : 
-    pnlCol = color("#0095D9");  // ao
-    break;
-  case 1024 : 
-    pnlCol = color("#F39800");  // kintya
-    break; 
-  case 2048 : 
-    pnlCol = color("#E2041B");  // shoujyouhi
-    break;
-  case 4096 :
-    pnlCol = color("#AA4C8F");  // ume murasaki
-    break;
-  case 8192 :
-    pnlCol = color("#9F6F55");  // tonotya
-    break;
-  default : 
-    pnlCol = color("#EEBBCB");  // nadesiko
-    break;
+  const FRAMECOLOR = "#696969";
+
+  let d;
+
+  strokeWeight(1.2);
+  stroke(FRAMECOLOR);
+
+  if ( mdl.isNewPanelIndex(r, c) && this.newPanelSize < PANELSIZE ) {
+    d = (PANELSIZE - this.newPanelSize) / 2;
+    fill(FRAMECOLOR);
+    rect(c*PANELSIZE, r*PANELSIZE, PANELSIZE, PANELSIZE);
+    noStroke();
+    fill(this.getPanelColor(mdl.getPanelNumAt(r, c)));
+    rect(c*PANELSIZE+d, r*PANELSIZE+d, this.newPanelSize, this.newPanelSize);
+    this.newPanelSize += 5;
+  } else {
+    fill(this.getPanelColor(mdl.getPanelNumAt(r, c)));
+    rect(c*PANELSIZE, r*PANELSIZE, PANELSIZE, PANELSIZE);
   }
 
-  return pnlCol;
+  return ;
+};
+
+
+View.prototype.figure = function(r, c) {
+
+  const textSizeDict = [-1, 42, 40, 30, 25, 20, 18];
+
+  let index;
+
+  if ( (index = mdl.getPanelDigitAt(r, c)) > 0 ) {
+    noStroke();
+    fill(( index < 3 )? "#000000" : "#FFFFFF");
+    textSize(textSizeDict[index]);
+    text(mdl.getPanelNumAt(r, c), (c+0.5)*PANELSIZE, (r+0.6)*PANELSIZE);
+  }
+
+  return ;
+};
+
+
+View.prototype.getPanelColor = function(panelNum) {
+
+  const colorDict = [
+    "#E5E6E6", "#BBCFE4", "#DAD2E4", "#A6E8C5", // 0 ~ 8
+    "#DDF29F", "#F7BED9", "#E8D485", // 16 ~ 64 
+    "#5EC125", "#E3259D", "#F58123", // 128 ~ 512
+    "#457DA8", "#88BC06", "#35C9DB", "#9B3A91"  // 1024 ~ 8192 
+  ];
+
+  let index = this.binlog(panelNum);
+
+  return ( index < colorDict.length )? colorDict[index] : "#272B58";
+};
+
+
+View.prototype.binlog = function(n) {
+
+  let logn;
+
+  for ( logn = 0; n > 1; n = int(n/2), logn++ );
+
+  return (int)(logn);
+};
+
+
+View.prototype.initNewPanelSize = function() {
+
+  this.newPanelSize = 40;
+
+  return ;
 };
 
 
 View.prototype.finMessage = function() {
 
-  /* panel */
-  strokeWeight(5);
-  stroke("#E6E6FA");  // lavender
-  fill("#FFFFFF");  // white
-  rectMode(CENTER);
-  rect(BOARD_SIZE/2, BOARD_SIZE/2, 200, 100);
+  /* draw panels completely */
+  this.newPanelSize = PANELSIZE;
+  this.board();
 
-  /* text */
+  /* front panel */
+  strokeWeight(3);
+  stroke("#E6E6FA");
+  fill("#FFFFFFEB");
+  rect(0, 0, BOARDSIZE, BOARDSIZE);
+
+  /* message */
   noStroke();
-  fill("#000000");  // black
-  textSize(16);
-  textAlign(CENTER, CENTER);
-  text("GAME OVER !\nMax panel : " + mdl.getMaxPanel(), BOARD_SIZE/2, BOARD_SIZE/2);
+  fill("#000000");
+  textSize(18);
+  text("Game Over !\nMax number = " + mdl.getMaxPanelNum(), BOARDSIZE/2, BOARDSIZE/2);
 
   return ;
 };
