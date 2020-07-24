@@ -18,7 +18,7 @@ let Model = function() {
 Model.prototype.initPanels = function() {
 
   this.panels = new Array(SIZE);
-  for ( let r = 0; r < this.panels.length; r++ ) {
+  for ( let r = 0; r < SIZE; r++ ) {
     this.panels[r] = new Array(SIZE).fill(EMPTYPANEL);
   }
 
@@ -52,26 +52,17 @@ Model.prototype.genNewPanel = function() {
 };
 
 
-Model.prototype.move = function(direction) {
+Model.prototype.move = function(moveDir) {
 
   let prevPanels = this.copyPrevPanels();
 
   // debug log print
   for ( let r = 0; r < SIZE; r++ ) {
-    console.log(r+":"+(prevPanels[r][0])+"|"+(prevPanels[r][1])+"|"+(prevPanels[r][2])+"|"+(prevPanels[r][3])+"|");
+    console.log(r+": "+(prevPanels[r][0])+"|"+(prevPanels[r][1])+"|"+(prevPanels[r][2])+"|"+(prevPanels[r][3])+"|");
   }
   console.log("\n");
 
-  /*  << TODO >>
-   fix moveTo* functions
-   in case : |2|2|4|4| + (->) ==> |0|0|4|8|
-   */
-  /* << TODO >>
-   integrate moveTo* functions
-   (North+South(vert) and East+West(hriz))
-   */
-
-  switch( direction ) {
+  switch( moveDir ) {
   case TONORTH :
     this.moveToNorth();
     break;
@@ -95,7 +86,7 @@ Model.prototype.moveToNorth = function() {
   for ( let c = 0; c < SIZE; c++ ) {
     /* replicate panels on c-th column */
     let replLine = new Array(SIZE);
-    for ( let r = 0; r < replLine.length; r++ ) {
+    for ( let r = 0; r < SIZE; r++ ) {
       replLine[r] = this.panels[r][c];
     }
     /* addition */
@@ -136,7 +127,7 @@ Model.prototype.moveToSouth = function() {
   for ( let c = 0; c < SIZE; c++ ) {
     /* replicate panels on c-th column */
     let replLine = new Array(SIZE);
-    for ( let r = 0; r < replLine.length; r++ ) {
+    for ( let r = 0; r < SIZE; r++ ) {
       replLine[r] = this.panels[r][c];
     }
     /* addition */
@@ -177,7 +168,7 @@ Model.prototype.moveToEast = function() {
   for ( let r = 0; r < SIZE; r++ ) {
     /* replicate panels on r-th row */
     let replLine = new Array(SIZE);
-    for ( let c = 0; c < replLine.length; c++ ) {
+    for ( let c = 0; c < SIZE; c++ ) {
       replLine[c] = this.panels[r][c];
     }
     /* addition */
@@ -218,7 +209,7 @@ Model.prototype.moveToWest = function() {
   for ( let r = 0; r < SIZE; r++ ) {
     /* replicate panels on r-th row */
     let replLine = new Array(SIZE);
-    for ( let c = 0; c < replLine.length; c++ ) {
+    for ( let c = 0; c < SIZE; c++ ) {
       replLine[c] = this.panels[r][c];
     }
     /* addition */
