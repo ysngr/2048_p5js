@@ -310,18 +310,19 @@ Model.prototype.isGameFinished = function() {
   }
 
   /* search pair to be added */
-  for ( let r = 0; r < SIZE; r++ ) {
-    for ( let c = 0; c < SIZE; c++ ) {
+  for ( let r = 0; r < SIZE-1; r++ ) {
+    for ( let c = 0; c < SIZE-1; c++ ) {
       // vertical
-      if ( r < SIZE-1 && this.panels[r][c] == this.panels[r+1][c] ) {
+      if ( this.panels[r][c] == this.panels[r+1][c] ) {
         return false;
       }
       // horizontal
-      if ( c < SIZE-1 && this.panels[r][c] == this.panels[r][c+1] ) {
+      if ( this.panels[r][c] == this.panels[r][c+1] ) {
         return false;
       }
     }
   }
+
 
   return true;
 };

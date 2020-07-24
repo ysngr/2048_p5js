@@ -2,9 +2,6 @@
 //  View
 //====================================================================
 
-const INITNEWPANELSIZE = 40;
-const FRAMECOLOR = "#696969";
-
 
 let View = function() {
   this.newPanelSize = PANELSIZE;
@@ -31,6 +28,8 @@ View.prototype.board = function() {
 
 
 View.prototype.panel = function(r, c) {
+
+  const FRAMECOLOR = "#696969";
 
   let d;
 
@@ -96,7 +95,7 @@ View.prototype.binlog = function(n) {
 
 View.prototype.initNewPanelSize = function() {
 
-  this.newPanelSize = INITNEWPANELSIZE;
+  this.newPanelSize = 40;
 
   return ;
 };
